@@ -49,7 +49,7 @@ export default function Navbar() {
   return (
     <div >
         <ul className='flex justify-between content-center border-b-2 p-4'>
-            <li><Link href="/">AnimeList</Link></li>
+            <li className='font-bold font-serif text-xl px-3'><Link href="/">AniVerse</Link></li>
             <li>
               <input
             type="text"
@@ -63,7 +63,7 @@ export default function Navbar() {
             hx-swap="innerHTML"
           />
           {isFocused && 
-          <ul id="results" className='bg-white overflow-y-auto z-50 text-black opacity-50 overflow-x-hidden'>
+          <ul id="results" className='bg-black overflow-y-auto z-50 text-white opacity-80 overflow-x-hidden'>
             {Object.entries(results).slice(0,5).map(([id, name]) => (
               <Link href={`/anime/${id}`}><li key={id} className='cursor-pointer p-1 border-black border-y-1'> {name}</li></Link>
             ))}
@@ -74,7 +74,7 @@ export default function Navbar() {
             (<li className='cursor-pointer' onClick={handleSignIn}> Sign In</li>) 
             :(<>
             <Link href='/profile' className='flex content-center justify-center'>
-              <li className='' >{user.displayName}</li>
+              <li className='font-semibold font-sans text-base' >{user.displayName}</li>
               <li><img className='rounded-full size-5 mx-2 mt-1' src={user.photoURL} alt="dp" /></li>
             </Link>
               <li className='cursor-pointer' onClick={handleSignOut}> Sign Out</li>

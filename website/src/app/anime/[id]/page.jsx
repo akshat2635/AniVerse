@@ -51,9 +51,9 @@ export default function anime() {
       {!animeInfo ? <></>:
       <>
       <div className="flex flex-col justify-center items-center p-3 m-2 ">
-        <h1 className="text-2xl font-semibold">{animeInfo.title} ({Number(animeInfo.year)!==0?animeInfo.year:'unknown'})</h1>
+        <h1 className="text-2xl font-semibold">{animeInfo.title} {Number(animeInfo.year)!==0?<span>({Number(animeInfo.year)})</span>:''}</h1>
 
-          <p >Genres: {(animeInfo.genres+animeInfo.themes+(animeInfo.demographics=="unknown"?"":animeInfo.demographics)).split(" ").join(" , ").slice(0,-2)}</p>
+          <p >Genres: {((animeInfo.genres=="unknown"?"":animeInfo.genres)+(animeInfo.themes=="unknown"?"":animeInfo.themes)+(animeInfo.demographics=="unknown"?"":animeInfo.demographics)).split(" ").join(" , ").slice(0,-2)}</p>
         
         <div className="flex justify-center content-center my-3 ml-16">
           <img className="p-2 m-2 w-1/5" src={animeInfo.image_url} alt="img" />
@@ -64,13 +64,22 @@ export default function anime() {
           </div>
           <div className="w-1/3 flex flex-col justify-around content-center">
             <div>
-              {userrating? <p> Your Rating : {userrating} <span class="fa fa-star checked"></span></p>:<div> Rate this Anime 
+              {userrating? <div> <span className="font-bold"> Your Rating  </span> : {userrating}/10 
+              <div className="stars">
+                  {[...Array(10)].map((_, index) => (
+                    <span
+                      key={index}
+                      className={`fa fa-star size-5 ${index < userrating ? 'checked' : ''} cursor-pointer`}
+                    ></span>
+                  ))}
+                </div>
+              </div>:<div> <span className="font-bold"> Rate This Anime  </span>
                 <br />
                 <div className="stars">
                   {[...Array(10)].map((_, index) => (
                     <span
                       key={index}
-                      className={`fa fa-star ${index <= hoverIndex ? 'checked' : ''} cursor-pointer`}
+                      className={`fa fa-star size-5 ${index <= hoverIndex ? 'checked' : ''} cursor-pointer`}
                       onMouseEnter={() => handleStarHover(index)}
                       onMouseLeave={handleStarLeave}
                       onClick={() => handleStarClick(index+1)}
@@ -79,7 +88,7 @@ export default function anime() {
                 </div>
                 </div>}
             </div>
-              <div className="h-2/5 mb-12 mt-7">
+              <div className="h-2/5 mt-7">
                 <p><span className="font-bold"> Rating  </span>: {animeInfo.rating}</p>
                 <p><span className="font-bold"> Aired </span>: {animeInfo.aired}</p>
                 <p><span className="font-bold"> Type </span>: {animeInfo.type} </p>
@@ -88,7 +97,7 @@ export default function anime() {
                 <p><span className="font-bold"> Duration </span>: {animeInfo.duration}</p>
                 <p><span className="font-bold"> Studios </span>: {animeInfo.studios}</p>
               </div>
-              <div>
+              <div className="mt-7">
               <p><span className="font-bold"> Popularity Rank </span> : {animeInfo.popularity}</p>
               <p><span className="font-bold"> Rank </span> : {Number(animeInfo.rank)}</p> 
               <p><span className="font-bold"> Favourited By </span> : {(animeInfo.favorites)}</p>

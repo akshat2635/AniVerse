@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "start-flask": "cd ../api && .\\venv\\Scripts\\activate && flask run",
-    "start-dev": "concurrently \"npm run dev\" \"npm run start-flask\""
+    "start-dev": "concurrently \"npm run dev\" \"npm run start-flask\"",
+    "start-build": "concurrently \"npm run build\" \"npm run start-flask\""
   },
   "dependencies": {
     "@uidotdev/usehooks": "^2.4.1",

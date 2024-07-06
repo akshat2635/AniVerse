@@ -1,0 +1,18 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/app.py",
+        "use": "@vercel/python"
+      },
+      {
+        "src": "website/next.config.js",
+        "use": "@vercel/next"
+      }
+    ],
+    "routes": [
+      { "src": "/api/(.*)", "dest": "/api/app.py" },
+      { "src": "/(.*)", "dest": "/website/$1" }
+    ]
+  }
+  

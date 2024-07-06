@@ -20,6 +20,8 @@
 .DS_Store
 *.pem
 
+/src/app/firebase.js
+
 # debug
 npm-debug.log*
 yarn-debug.log*

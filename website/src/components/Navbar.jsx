@@ -1,10 +1,10 @@
 'use client';
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import Link from 'next/link'
-import { UserAuth } from "../app/context/AuthContext";
+// import { UserAuth } from "../app/context/AuthContext";
 export default function Navbar() {
-  const { user, googleSignIn, logOut } = UserAuth();
-  const [loading, setLoading] = useState(true);
+  // const { user, googleSignIn, logOut } = UserAuth();
+  // const [loading, setLoading] = useState(true);
 
   const [results, setResults] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
@@ -21,39 +21,39 @@ export default function Navbar() {
   };
   // console.log(results)
 
-  const handleSignIn = async () => {
-    try {
-      await googleSignIn();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleSignIn = async () => {
+  //   try {
+  //     await googleSignIn();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleSignOut = async () => {
-    try {
-      await logOut();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleSignOut = async () => {
+  //   try {
+  //     await logOut();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-      setLoading(false);
-    };
-    checkAuthentication();
-  }, [user]);
+  // useEffect(() => {
+  //   const checkAuthentication = async () => {
+  //     await new Promise((resolve) => setTimeout(resolve, 50));
+  //     setLoading(false);
+  //   };
+  //   checkAuthentication();
+  // }, [user]);
 
   // console.log(user)
   return (
     <div >
         <ul className='flex justify-between content-center border-b-2 p-4'>
-            <li className='font-bold font-serif text-xl px-3'><Link href="/">AniVerse</Link></li>
-            <li>
+            <li className='font-bold font-serif text-xl px-3 mx-10'><Link href="/">AniVerse</Link></li>
+            <li className='mx-28'>
               <input
             type="text"
-            className='text-black rounded-md px-2 w-full'
+            className='text-black rounded-md px-3 w-full'
             onInput={handleSearch}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Delay to allow clicking on results
@@ -70,7 +70,7 @@ export default function Navbar() {
           </ul>}
 
             </li>
-            {!user?
+            {/* {!user?
             (<li className='cursor-pointer' onClick={handleSignIn}> Sign In</li>) 
             :(<>
             <Link href='/profile' className='flex content-center justify-center'>
@@ -80,7 +80,7 @@ export default function Navbar() {
               <li className='cursor-pointer' onClick={handleSignOut}> Sign Out</li>
             </>
             )
-             }
+             } */}
             {/* <li className='cursor-pointer' onClick={handleSignIn}>{user? user.displayName : 'Sign In'}</li> */}
 
         </ul>

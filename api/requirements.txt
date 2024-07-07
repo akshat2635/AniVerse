@@ -3,11 +3,13 @@ click==8.1.7
 colorama==0.4.6
 Flask==3.0.3
 Flask-Cors==4.0.1
+gunicorn==22.0.0
 itsdangerous==2.2.0
 Jinja2==3.1.4
 joblib==1.4.2
 MarkupSafe==2.1.5
 numpy==2.0.0
+packaging==24.1
 pandas==2.2.2
 python-dateutil==2.9.0.post0
 pytz==2024.1

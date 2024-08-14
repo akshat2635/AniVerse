@@ -1,6 +1,7 @@
 // components/Carousel.js
-import React, { useState ,useEffect} from 'react';
+import React, { useState ,useEffect,useRef} from 'react';
 import CarouselCard from './CarouselCard';
+import anime from '@/app/anime/[id]/page';
 
 const Carousel = ({category,id,n}) => {
   let api=""
@@ -42,19 +43,27 @@ const Carousel = ({category,id,n}) => {
       };
     }, []);
 
+    
     const [currentIndex, setCurrentIndex] = useState(0);
+    const carouselRef = useRef(null);
     const itemsPerPage = 6;
     // var prevIndex=0;
     const prevSlide = () => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex -itemsPerPage <0 ? Math.max(animeInfo.length - itemsPerPage, 0) : prevIndex - itemsPerPage
-      );
+      if (carouselRef.current) {
+        carouselRef.current.scrollBy({
+          left: -carouselRef.current.offsetWidth,
+          behavior: 'smooth',
+        });
+      }
     };
   
     const nextSlide = () => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex + itemsPerPage >= animeInfo.length ? 0 : prevIndex + itemsPerPage
-    );
+      if (carouselRef.current) {
+        carouselRef.current.scrollBy({
+          left: carouselRef.current.offsetWidth,
+          behavior: 'smooth',
+        });
+      }
   };
   
   const getCurrentImages = () => {
@@ -62,6 +71,7 @@ const Carousel = ({category,id,n}) => {
       if(!animeInfo){
         return null
       }
+      return animeInfo
       const endIndex = currentIndex + itemsPerPage;
       if (endIndex > animeInfo.length) {
         return animeInfo.slice(currentIndex).concat(animeInfo.slice(0, endIndex - animeInfo.length));
@@ -72,9 +82,9 @@ const Carousel = ({category,id,n}) => {
     return (
       <div className="relative w-full max-w-7xl mx-auto">
         {/* <h1 className='pb-3'>{category.toUpperCase()}</h1> */}
-        <div className="flex  relative h-72 space-x-4 transition-transform duration-500 ease-in-out transform">
-          {getCurrentImages()?getCurrentImages().map((temp,index) => (
-            <div key={index} className="w-1/6 transition-opacity duration-500 ease-in-out ">
+        <div className="carousel flex  relative space-x-1" ref={carouselRef}>
+          {animeInfo?animeInfo.map((temp,index) => (
+            <div key={index} className="carousel-item w-1/6 transition-opacity duration-500 ease-in-out ">
               <CarouselCard aid={temp.anime_id} image={temp.image_url} syn={temp.synopsis} title={temp.title}/>
             </div>
           )):""}

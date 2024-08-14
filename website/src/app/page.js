@@ -1,4 +1,5 @@
 'use client';
+import Link from "next/link";
 import Carousel from "@/components/Carousel";
 import { UserAuth } from "./context/AuthContext";
 

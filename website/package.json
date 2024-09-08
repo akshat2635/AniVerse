@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "start-flask": "cd ../api && .\\venv\\Scripts\\activate && flask run",
-    "start-dev": "concurrently \"npm run dev\" \"npm run start-flask\"",
+    "start-node": "cd ../backend  && npm run start-dev",
+    "start-dev": "concurrently \"npm run dev\" \"npm run start-node\" \"npm run start-flask\"",
     "start-build": "concurrently \"npm run build\" \"npm run start-flask\""
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "bootstrap": "^5.3.3",
     "concurrently": "^8.2.2",
     "firebase": "^10.12.2",
+    "js-cookie": "^3.0.5",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18"

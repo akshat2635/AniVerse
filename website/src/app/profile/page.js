@@ -1,21 +1,22 @@
-'use client'
-import React from 'react'
-import { UserAuth } from '../context/AuthContext';
-export default function profile() {
-  const { user} = UserAuth();
+"use client"
+import React, { useState } from 'react';
+import UserProfileForm from '../../components/UserProfileForm';
+import UserProfile from '../../components/UserProfile';
+
+const UserProfilePage = () => {
+  const [profile, setProfile] = useState(null);
+
+  const handleFormSubmit = (formData) => {
+    setProfile(formData);
+  };
+
   return (
-    
     <div>
-      {user? 
-      (<div className='flex'>
-      <img className='rounded-md p-2 m-2' src={user.photoURL} alt="dp" />
-      <div className='p-2 m-1' >
-        <h1>{user.displayName}</h1> 
-        <h1>{user.email}</h1>
-      </div>
-      </div>
-      )
-      : "Not logged in"}
+      <h1>User Profile</h1>
+      <UserProfileForm onSubmit={handleFormSubmit} />
+      {profile && <UserProfile profile={profile} />}
     </div>
-  )
-}
+  );
+};
+
+export default UserProfilePage;

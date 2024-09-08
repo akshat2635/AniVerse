@@ -2,10 +2,66 @@
 "use client";
 import { useState,useEffect } from "react"
 import Carousel from "@/components/Carousel";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
+// import { useRouter } from "next/router";
+import Modal from "@/components/Modal";
 export default function anime() {
+  const { user, logout } = useAuth();
+
+  if (!user) {
+    return (
+      <>
+      <Modal showModal={true} head={"User Not Logged IN"} msg="Please Login To Continue" link_msg="Login" link={"/login"} />
+      </>
+    );
+  }
+  const [token, setToken] = useState(null);
   const [hoverIndex, setHoverIndex] = useState(-1); // State to track hovered index
-  const [userrating, setuserrating] = useState(null);
+  const [userStar, setuserStar] = useState(null);
+  const [userReview, setuserReview] = useState(null);
+  // const [userrating, setuserrating] = useState(null);
+  const [ratDisplay,setRatDisplay]=useState(false);
+  const id=useParams().id
+
+  useEffect(() => {
+    // Fetch token from localStorage
+    const storedToken = localStorage.getItem('accessToken');
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []); // Empty dependency array ensures this runs once on mount
+
+  useEffect(() => {
+    // Fetch rating only when token is set
+    if (token) {
+      const fetchRating = async () => {
+        try {
+          const response = await fetch(`http://localhost:6969/rating/user/${id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+
+          const data = await response.json();
+          console.log(data);
+          if (response.ok) {
+            setuserStar(data.rating);
+            setuserReview(data.review);
+            setRatDisplay(true);
+          } else {
+            console.log(data.message);
+          }
+        } catch (error) {
+          console.error('Error fetching rating:', error);
+        }
+      };
+
+      fetchRating();
+    }
+  }, [token]);
+
   const handleStarHover = (index) => {
     setHoverIndex(index); // Set the hovered index
   };
@@ -13,12 +69,40 @@ export default function anime() {
   const handleStarLeave = () => {
     setHoverIndex(-1); // Reset hover state on mouse leave
   };
-  const handleStarClick =(ind) =>{
-    console.log(ind)
-    setuserrating(ind)  
+  const handleRatingSubmit =async (e) =>{
+    // console.log(ind)
+    // setuserrating(ind);
+    e.preventDefault();
+    const data = {
+      animeId: id,
+      userRating: userStar,
+      review:userReview
+    };
+    try {
+      const response = await fetch('http://localhost:6969/rating', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        throw new Error(error);
+      }
+  
+      const result = await response.json();
+      console.log(result);
+      setRatDisplay(true);
+    } catch (error) {
+      console.error('Error:', error);
+    }  
+  }
+  const handleStarClick=(ind)=>{
+    setuserStar(ind);
   }
   const [animeInfo, setAnimeInfo] = useState(null);
-  const id=useParams().id
   useEffect(() => {
     let isMounted = true;
       const fetchAnimeInfo = async () => {
@@ -64,29 +148,47 @@ export default function anime() {
           </div>
           <div className="w-1/3 flex flex-col justify-around content-center">
             <div>
-              {userrating? <div> <span className="font-bold"> Your Rating  </span> : {userrating}/10 
+              {ratDisplay? <div> <span className="font-bold"> Your Rating  </span> : {userStar}/10 
               <div className="stars">
                   {[...Array(10)].map((_, index) => (
                     <span
                       key={index}
-                      className={`fa fa-star size-5 ${index < userrating ? 'checked' : ''} cursor-pointer`}
+                      className={`fa fa-star size-5 ${index < userStar ? 'checked' : ''} cursor-pointer`}
                     ></span>
                   ))}
+                <h3>Your Review</h3>
+                <p>{userReview}</p>
                 </div>
-              </div>:<div> <span className="font-bold"> Rate This Anime  </span>
+                <button type="button" onClick={()=>{setRatDisplay(false)}} 
+                className="group relative mt-4 flex justify-center py-1 px-8 border border-transparent text-base font-medium rounded-md text-gray-900 bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Edit Review </button>
+              </div>:
+              <form onSubmit={handleRatingSubmit}>
+               <span className="font-bold"> Rate This Anime  </span>
                 <br />
                 <div className="stars">
-                  {[...Array(10)].map((_, index) => (
-                    <span
-                      key={index}
-                      className={`fa fa-star size-5 ${index <= hoverIndex ? 'checked' : ''} cursor-pointer`}
-                      onMouseEnter={() => handleStarHover(index)}
-                      onMouseLeave={handleStarLeave}
-                      onClick={() => handleStarClick(index+1)}
-                    ></span>
-                  ))}
+                  <div className="inline">
+                    {[...Array(10)].map((_, index) => (
+                      <span
+                        key={index}
+                        className={`fa fa-star size-5 ${userStar?index < userStar ? 'checked' : '': index <= hoverIndex ? 'checked' : ''} cursor-pointer`}
+                        onMouseEnter={() => handleStarHover(index)}
+                        onMouseLeave={handleStarLeave}
+                        onClick={() => handleStarClick(index+1)}
+                      ></span>
+                    ))}
+                  </div>
+                  {userStar && <h5 className=" inline ">     {userStar}/10 </h5>}
                 </div>
-                </div>}
+                <div>
+                  <textarea name="review" className="w-auto h-full px-5 py-2 mt-3 bg-slate-600 text-white textarea-accent" id="review" onChange={(e)=>setuserReview(e.target.value)} placeholder="Enter your review"/>
+                </div>
+                <button type="submit" 
+                className="group relative mt-4 flex justify-center py-1 px-8 border border-transparent text-base font-medium rounded-md text-gray-900 bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Submit review </button>
+              </form>}
             </div>
               <div className="h-2/5 mt-7">
                 <p><span className="font-bold"> Rating  </span>: {animeInfo.rating}</p>

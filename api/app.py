@@ -123,12 +123,13 @@ def hybrid_recommendation(a_id,n=20,filter=1,alpha=0.4):
     
     global user_watched
     if(a_id in pop_anime):
-        cf_scores=cf_recommendation(a_id,alpha,2*n)
+        cf_scores=cf_recommendation(a_id,alpha,4*n)
     else:
         cf_scores={}
-    print(user_watched)
-    content_scores=content_recommendation(a_id,1-alpha,2*n)
+    # print(user_watched)
+    content_scores=content_recommendation(a_id,1-alpha,4*n)
     hybrid_scores=combine_dictionaries(cf_scores,content_scores)
+    hybrid_scores={key:val for key,val in hybrid_scores.items() if( content_df.loc[key]['type'] not in ['Special','TV Special','OVA','PV']) and len(content_df.loc[key]['synopsis'])>80}
     if filter==1:
         hybrid_scores={key:val for key,val in hybrid_scores.items() if key not in user_watched}
     
@@ -138,7 +139,7 @@ def user_recommendation(user_ratings,n=20,alpha=0.5):
     overall_score={}
     for a_id in user_ratings:
         rate=user_ratings[a_id]/10
-        hybrid_score=hybrid_recommendation(a_id,n,alpha)
+        hybrid_score=hybrid_recommendation(a_id,n,1,alpha)
         hybrid_score=multiply_dict_values(hybrid_score,rate)
         overall_score=combine_dictionaries(overall_score,hybrid_score)
        
@@ -178,21 +179,21 @@ def get_names():
 def submit_ratings():
     global user_watched
     if not request.is_json:
-        return jsonify({"error": "Request must be JSON"}), 400
+        return jsonify({"error": "Request must be JSON"}, 400)
 
     data = request.get_json()
 
     try:
         ratings = data["ratings"]
-        print(ratings)
+        # print(ratings)
         user_rat={int(key):value for key,value in ratings.items()}
         user_watched=list(user_rat.keys())
-        scores=user_recommendation(user_rat,5)
+        scores=user_recommendation(user_rat,n=40)
         rid=list(scores.keys())
         r_df=content_df.loc[rid]
         r_dict=cvt_df_dict(r_df.reset_index())
         
-        return jsonify({"message": "Ratings received", "received_ratings": ratings,"recommended for user":r_dict}), 200
+        return jsonify({"message": "Ratings received", "received_ratings": ratings,"recommended":r_dict}), 200
     except KeyError:
         return jsonify({"error": "Invalid data format"}), 400
 

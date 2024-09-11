@@ -42,7 +42,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const refreshAccessToken = async () => {
     try {
-      const response = await fetch('http://localhost:6969/refresh', {
+      const response = await fetch('https://aniverse-backend-3gqz.onrender.com/refresh', {
         method: 'GET',
         credentials: 'include',
       });

@@ -1,20 +1,12 @@
 'use client';
 import React,{useState,useEffect} from 'react'
 import Link from 'next/link'
-// import { UserAuth } from "../app/context/AuthContext";
 import { useAuth } from '@/app/context/AuthContext';
 export default function Navbar() {
-  // const { user, googleSignIn, logOut } = UserAuth();
-  // const [loading, setLoading] = useState(true);
   const { user, logout } = useAuth();
-  // const [token, setToken] = useState(null);
   const [results, setResults] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem('accessToken');
-  //   setToken(storedToken);
-  //   console.log(storedToken);
-  // }, []);
+
   const handleSearch = async (e) => {
     const query = e.target.value;
     if (query.length > 0) {
@@ -25,33 +17,6 @@ export default function Navbar() {
       setResults([]);
     }
   };
-  // console.log(results)
-
-  // const handleSignIn = async () => {
-  //   try {
-  //     await googleSignIn();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const handleSignOut = async () => {
-  //   try {
-  //     await logOut();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const checkAuthentication = async () => {
-  //     await new Promise((resolve) => setTimeout(resolve, 50));
-  //     setLoading(false);
-  //   };
-  //   checkAuthentication();
-  // }, [user]);
-
-  // console.log(user)
   return (   
   <div className="navbar bg-base-300 ">
     <div className="flex-1 navbar-start">

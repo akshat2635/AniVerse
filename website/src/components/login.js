@@ -26,7 +26,7 @@ export default function LoginForm() {
         
     
         try {
-          const response = await fetch('http://localhost:6969/login', {
+          const response = await fetch('https://aniverse-backend-3gqz.onrender.com/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -59,7 +59,6 @@ export default function LoginForm() {
           setIsError(true);
         }
         setShowModal(true);
-        // document.getElementById('my_modal_5').showModal();
       };
 
   return (

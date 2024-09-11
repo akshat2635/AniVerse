@@ -37,7 +37,7 @@ export default function anime() {
     if (token) {
       const fetchRating = async () => {
         try {
-          const response = await fetch(`http://localhost:6969/rating/user/${id}`, {
+          const response = await fetch(`hhttps://aniverse-backend-3gqz.onrender.com/rating/user/${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function anime() {
       review:userReview
     };
     try {
-      const response = await fetch('http://localhost:6969/rating', {
+      const response = await fetch('https://aniverse-backend-3gqz.onrender.com/rating', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

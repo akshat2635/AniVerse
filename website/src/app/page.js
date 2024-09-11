@@ -23,7 +23,7 @@ export default function Home() {
     if (token) {
       const fetchRating = async () => {
         try {
-          const response = await fetch(`http://localhost:6969/rating`, {
+          const response = await fetch(`https://aniverse-backend-3gqz.onrender.com/rating`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ export default function Home() {
   useEffect(() => {
     const fetchTrending = async () => {
       try {
-        const response = await fetch(`http://localhost:6969/rating/trending`, {
+        const response = await fetch(`https://aniverse-backend-3gqz.onrender.com/rating/trending`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -41,7 +41,7 @@ export default function RegisterForm() {
 
     // console.log('Submitting form with:', { username, email, password });
     try {
-      const response = await fetch('http://localhost:6969/register', {
+      const response = await fetch('https://aniverse-backend-3gqz.onrender.com/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

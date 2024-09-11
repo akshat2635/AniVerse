@@ -4,15 +4,15 @@ import CarouselCard from './CarouselCard';
 const Carousel = ({ category, id, n, filter, userRecom }) => {
   let api = '';
   if (category === 'popular') {
-    api = `http://127.0.0.1:5000/popular?n=${n}`;
+    api = `https://aniverse-3tlm.onrender.com/popular?n=${n}`;
   } else if (category === 'id') {
-    api = `http://127.0.0.1:5000/recommend?id=${id}&n=${n}&filter=${filter?filter:0}`;
+    api = `https://aniverse-3tlm.onrender.com/recommend?id=${id}&n=${n}&filter=${filter?filter:0}`;
   } else if (category === 'top') {
-    api = `http://127.0.0.1:5000/top?n=${n}`;
+    api = `https://aniverse-3tlm.onrender.com/top?n=${n}`;
   } else if (category === 'favorite') {
-    api = `http://127.0.0.1:5000/favorite?n=${n}`;
+    api = `https://aniverse-3tlm.onrender.com/favorite?n=${n}`;
   } else if (category === 'viewed') {
-    api = `http://127.0.0.1:5000/viewed?n=${n}`;
+    api = `https://aniverse-3tlm.onrender.com/viewed?n=${n}`;
   }
 
   const [animeInfo, setAnimeInfo] = useState(null);

@@ -68,7 +68,7 @@ export default function Home() {
   useEffect(()=>{
     const fetchRecom=async ()=>{
       try {
-        const response = await fetch(`http://127.0.0.1:5000/submit-ratings`, {
+        const response = await fetch(`https://aniverse-3tlm.onrender.com/submit-ratings`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export default function Home() {
   useEffect(()=>{
     const fetchtrendingAnime=async ()=>{
       try {
-        const response = await fetch(`http://127.0.0.1:5000/get-info`, {
+        const response = await fetch(`https://aniverse-3tlm.onrender.com/get-info`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ export default function Home() {
   useEffect(()=>{
     const fetchname=async ()=>{
       try {
-        const response = await fetch(`http://127.0.0.1:5000/get-info/${userFav}`, {
+        const response = await fetch(`https://aniverse-3tlm.onrender.com/get-info/${userFav}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

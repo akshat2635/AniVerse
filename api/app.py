@@ -2,43 +2,21 @@ from flask import Flask,jsonify,request
 from flask_cors import CORS
 import pandas as pd 
 import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import OneHotEncoder,MinMaxScaler
-from scipy.sparse import hstack
-from sklearn.metrics.pairwise import linear_kernel,cosine_similarity
 
 ########################################### Preprocessing #############################################################
 
-scaler=MinMaxScaler()
-#content similarity
-content_features=pd.read_csv('./data/content_features.csv',index_col='anime_id')
-f_df=pd.read_csv("./data/temp.csv",index_col=0)
 content_df=pd.read_csv('./data/content_based_data.csv',index_col='anime_id')
 
 content_df.fillna("unknown",inplace=True)
 cf_index=pd.read_csv('./data/cf_index.csv',index_col=0)
 pop_anime=list(cf_index['anime_id'])
 
-cv=TfidfVectorizer(stop_words='english')
-vectors=cv.fit_transform(content_features['tags']).toarray()
-
-categorical=f_df.drop(['anime_id', 'url', 'title','episodes','aired', 'duration', 'score', 'scored_by', 'rank',
-       'popularity', 'synopsis', 'year','genres', 'themes','image_url', 'small_image_url', 'large_image_url',
-       'embed_url', 'yt_image'],axis=1)
-onehot_encoder = OneHotEncoder(handle_unknown='ignore')
-onehot_encoded = onehot_encoder.fit_transform(categorical)
-weight_tfidf = 0.85
-weight_onehot = 0.15
-combined_features = hstack([weight_tfidf*vectors, weight_onehot*onehot_encoded])
-cosine_sim_combined = linear_kernel(combined_features, combined_features)
-cosine_sim_combined=scaler.fit_transform(cosine_sim_combined)
+cosine_sim_combined=np.load('./data/content_sim_compressed.npz')['array']
 
 # collaborative similarity
-item_factors = np.loadtxt('./data/items.txt', dtype=float)
-cf_similarity=cosine_similarity(item_factors)
-cf_similarity=scaler.fit_transform(cf_similarity)
+cf_similarity=np.load('./data/cf_sim_compressed.npz')['array']
 
-########################################## Global User Variables #######################################################
+########################################## Global User VSariables #######################################################
 user_watched=[]
 ####################################### helper functions ###############################################################
 
@@ -159,6 +137,20 @@ def get_info(id):
         return jsonify({'error':'Invalid anime id'}), 400
     try:    
         df=content_df.loc[[id]]
+
+        r_dict=cvt_df_dict(df.reset_index())
+        
+        return jsonify({"status":"found","data":r_dict})
+    except:
+        return jsonify({"status":"not found"}), 400
+@app.route("/get-info",methods=['POST'])
+def get_info_post():
+    rat = request.get_json()
+    try:    
+        ids = rat["id"]
+        # print(ratings)
+        # user_rat={int(key):value for key,value in ratings.items()}
+        df=content_df.loc[ids]
 
         r_dict=cvt_df_dict(df.reset_index())
         

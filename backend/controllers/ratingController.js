@@ -52,7 +52,7 @@ const getRatingsUser = async (req, res) => {
 const getRatings = async (req, res) => {
     if(!req?.user?.username) return res.status(400).json({ "message": 'JWT ne nhi diya username' })
     try {
-        const userReviews = await rating.find({username:req.user.username}).select('animeId rating').exec();
+        const userReviews = await rating.find({username:req.user.username}).sort({reviewedAt:'descending'}).exec();
         if (!userReviews) {
         return res.status(400).json({ "message": `there are no reviews by ${req.user.username}` });
         }
@@ -62,6 +62,68 @@ const getRatings = async (req, res) => {
         return res.status(400).json({"Error":err.message});
     }
 }
+
+const getTrending = async (req, res) => {
+    try {
+      const tenDaysAgo = new Date();
+      tenDaysAgo.setDate(tenDaysAgo.getDate() - 15);  // Calculate the date 10 days ago
+  
+      const trendingAnime = await rating.aggregate([
+        // Match condition: ratings above 7 and reviewed within the last 10 days
+        {
+          $match: {
+            rating: { $gt: 7 },
+            reviewedAt: { $gte: tenDaysAgo }  // Filter out reviews older than 10 days
+          }
+        },
+        // Group by animeId and calculate the count of ratings and the latest reviewedAt date
+        {
+          $group: {
+            _id: "$animeId",  // Group by animeId
+            count: { $sum: 1 },  // Count how many times the anime was rated
+            latestReview: { $max: "$reviewedAt" }  // Get the most recent review date
+          }
+        },
+        // Add fields to calculate days since the latest review
+        {
+          $addFields: {
+            daysSinceLatestReview: {
+              $divide: [
+                { $subtract: [new Date(), "$latestReview"] },
+                1000 * 60 * 60 * 24  // Convert milliseconds to days
+              ]
+            }
+          }
+        },
+        // Sort by count (number of high ratings) and recency factor (most recent review comes first)
+        {
+          $sort: {
+            count: -1,  // Highest number of reviews comes first
+            daysSinceLatestReview: 1  // For ties in count, the most recent review comes first
+          }
+        },
+        // Project only the animeId and the count of ratings
+        {
+          $project: {
+            _id: 0,  // Do not return _id
+            animeId: "$_id",  // Return animeId
+            count: 1,  // Optionally return the count of ratings if needed
+            latestReview: 1  // Optionally return the latest review date if needed
+          }
+        }
+      ]).exec();
+  
+      res.json(trendingAnime);
+      
+    } catch (err) {
+      console.error("Error details:", err);
+      return res.status(400).json({ "Error": err.message });
+    }
+  }
+  
+  
+  
+  
 
 const getRatingsbyAnime = async (req, res) => {
     if(!req?.params?.id) return res.status(400).json({ "message": 'animeID is required' })
@@ -76,4 +138,4 @@ const getRatingsbyAnime = async (req, res) => {
     }
 }
 
-module.exports = { addRating ,getRatings,getRatingsbyAnime,getRatingsUser};
+module.exports = { addRating ,getRatings,getRatingsbyAnime,getRatingsUser,getTrending};

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CarouselCard from './CarouselCard';
 
-const Carousel = ({ category, id, n, userRecom }) => {
+const Carousel = ({ category, id, n, filter, userRecom }) => {
   let api = '';
   if (category === 'popular') {
     api = `http://127.0.0.1:5000/popular?n=${n}`;
   } else if (category === 'id') {
-    api = `http://127.0.0.1:5000/recommend?id=${id}&n=${n}&filter=0`;
+    api = `http://127.0.0.1:5000/recommend?id=${id}&n=${n}&filter=${filter?filter:0}`;
   } else if (category === 'top') {
     api = `http://127.0.0.1:5000/top?n=${n}`;
   } else if (category === 'favorite') {

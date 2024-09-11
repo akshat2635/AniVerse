@@ -8,11 +8,12 @@ import { useAuth } from "@/app/context/AuthContext";
 import Modal from "@/components/Modal";
 export default function anime() {
   const { user, logout } = useAuth();
-
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const router=useRouter();
   if (!user) {
     return (
       <>
-      <Modal showModal={true} head={"User Not Logged IN"} msg="Please Login To Continue" link_msg="Login" link={"/login"} />
+      <Modal showModal={isModalOpen} head={"User Not Logged IN"} msg="Please Login To Continue" link_msg="Login" onClose={()=>{setIsModalOpen(false); router.push('/login'); }} />
       </>
     );
   }

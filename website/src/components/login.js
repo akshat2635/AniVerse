@@ -15,10 +15,15 @@ export default function LoginForm() {
     const {login}=useAuth();
 
     const router=useRouter();
-
+    const handleModalClose = () => {
+      setShowModal(false); // Close the modal
+      if (!isError) {
+        router.push('/'); // Navigate if not an error
+      }
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setShowModal(true);
+        
     
         try {
           const response = await fetch('http://localhost:6969/login', {
@@ -53,7 +58,8 @@ export default function LoginForm() {
           setMessage('An error occurred: ' + error.message);
           setIsError(true);
         }
-        document.getElementById('my_modal_5').showModal();
+        setShowModal(true);
+        // document.getElementById('my_modal_5').showModal();
       };
 
   return (
@@ -71,7 +77,7 @@ export default function LoginForm() {
             <form method="POST" action="/" className="mt-8 space-y-6" onSubmit={handleSubmit}>
                 <div className="rounded-md shadow-sm">
                 <div>
-                    <label className="sr-only" for="username">Username</label>
+                    <label className="sr-only" htmlFor="username">Username</label>
                     <input
                     placeholder="Username"
                     className="appearance-none relative block w-full px-3 py-3 border border-gray-700 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -84,7 +90,7 @@ export default function LoginForm() {
                     />
                 </div>
                 <div className="mt-4">
-                    <label className="sr-only" for="password">Password</label>
+                    <label className="sr-only" htmlFor="password">Password</label>
                     <input
                     placeholder="Password"
                     className="appearance-none relative block w-full px-3 py-3 border border-gray-700 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -107,7 +113,7 @@ export default function LoginForm() {
                     id="remember-me"
                     onChange={(e)=>setRemember(e.target.checked)}
                     />
-                    <label className="ml-2 block text-sm text-gray-400" for="remember-me">Remember me</label>
+                    <label className="ml-2 block text-sm text-gray-400" htmlFor="remember-me">Remember me</label>
                 </div>
                 <div className="flex items-center">
                     <input
@@ -117,7 +123,7 @@ export default function LoginForm() {
                     id="show-pwd"
                     onChange={(e)=>setShow(e.target.checked)}
                     />
-                    <label className="ml-2 block text-sm text-gray-400" for="remember-me">Show Password</label>
+                    <label className="ml-2 block text-sm text-gray-400" htmlFor="remember-me">Show Password</label>
                 </div>
 
                 {/* <div className="text-sm">
@@ -135,7 +141,7 @@ export default function LoginForm() {
                     type="submit">
                     Sign In
                 </button>
-                <Modal showModal={showModal} head={isError?"Error":"Success"} msg={message} link_msg={isError?'Try Again':"Go To Home"} link={!isError?'/':"/login"} onClose={() => {setShowModal(false); !isError && router.push('/');}} />
+                <Modal showModal={showModal} head={isError?"Error":"Success"} msg={message} link_msg={isError?'Try Again':"Go To Home"} onClose={handleModalClose} />
                 </div>
             </form>
             </div>

@@ -73,7 +73,7 @@ export default function RegisterForm() {
       setMessage('An error occurred: ' + error.message);
       setIsError(true);
     }
-    document.getElementById('my_modal_5').showModal();
+    // document.getElementById('my_modal_5').showModal();
   };
 
   return (
@@ -165,7 +165,7 @@ export default function RegisterForm() {
                   disabled={!passwordMatch}>
                   Sign Up
                 </button>
-                <Modal showModal={showModal} head={isError?"Error":"Success"} msg={message} link_msg={isError?'Try Again':"Go To Login"} link={!isError?'/login':"/register"} onClose={() => {setShowModal(false); !isError && router.push('/login');}} />
+                <Modal showModal={showModal} head={isError?"Error":"Success"} msg={message} link_msg={isError?'Try Again':"Go To Login"} onClose={() => {setShowModal(false); !isError?router.push('/login'):router.push('/register');}} />
                 {/* <Modal head={isError?"Error":"Success"} msg={message} link={!isError?'/login':"/register"} link_msg={isError?'Try Again':"Go To Login"} /> */}
               </div>
             </form>

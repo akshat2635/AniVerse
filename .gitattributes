@@ -1,0 +1,2 @@
+api/data/cf_sim_compressed.npz filter=lfs diff=lfs merge=lfs -text
+api/data/content_sim_compressed.npz filter=lfs diff=lfs merge=lfs -text

@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 // import { useRouter } from "next/router";
 import Modal from "@/components/Modal";
-export default function anime() {
+export default function Anime() {
   const { user, logout } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const router=useRouter();

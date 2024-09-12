@@ -2,7 +2,6 @@ from flask import Flask,jsonify,request
 from flask_cors import CORS
 import pandas as pd 
 import numpy as np
-
 ########################################### Preprocessing #############################################################
 
 content_df=pd.read_csv('./data/content_based_data.csv',index_col='anime_id')
@@ -32,6 +31,21 @@ def combine_dictionaries(dict1, dict2):
 
 def multiply_dict_values(d, multiplier):
     return {key: value * multiplier for key, value in d.items()}
+
+def scale_dict_values(d, min_range=0.2, max_range=0.8):
+    min_val = min(d.values())
+    max_val = max(d.values())
+    
+    # Handle case where all values are the same to avoid division by zero
+    if min_val == max_val:
+        return {k: (min_range + max_range) / 2 for k in d}
+    
+    scaled_dict = {
+        k: min_range + (v - min_val) * (max_range - min_range) / (max_val - min_val)
+        for k, v in d.items()
+    }
+    
+    return scaled_dict
 
 def cvt_df_dict(df):
     cols=df.columns
@@ -113,11 +127,12 @@ def hybrid_recommendation(a_id,n=20,filter=1,alpha=0.4):
     
     return dict(list(hybrid_scores.items())[:n])
 
-def user_recommendation(user_ratings,n=20,alpha=0.5):
+def user_recommendation(user_ratings,n=30,alpha=0.4):
     overall_score={}
     for a_id in user_ratings:
         rate=user_ratings[a_id]/10
         hybrid_score=hybrid_recommendation(a_id,n,1,alpha)
+        hybrid_score=scale_dict_values(hybrid_score)
         hybrid_score=multiply_dict_values(hybrid_score,rate)
         overall_score=combine_dictionaries(overall_score,hybrid_score)
        
@@ -269,6 +284,8 @@ def recommend():
         scores=hybrid_recommendation(id,n,filter)
         rid=list(scores.keys())
         r_df=content_df.loc[rid]
+        if(filter):
+            r_df.sort_values(by='popularity',ascending=True,inplace=True)
         r_dict=cvt_df_dict(r_df.reset_index())
         
         return jsonify({"status":"found","data":r_dict})

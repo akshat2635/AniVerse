@@ -128,7 +128,7 @@ const getTrending = async (req, res) => {
 const getRatingsbyAnime = async (req, res) => {
     if(!req?.params?.id) return res.status(400).json({ "message": 'animeID is required' })
     try {
-        const userReviews = await rating.find({animeId:req.params.id}).exec();
+        const userReviews = await rating.find({animeId:req.params.id}).sort({reviewedAt:'descending'}).exec();
         if (!userReviews) {
             return res.status(400).json({ "message": `there are no reviews for ${req.params.id}` });
         }

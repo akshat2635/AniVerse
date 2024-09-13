@@ -7,6 +7,7 @@ import numpy as np
 content_df=pd.read_csv('./data/content_based_data.csv',index_col='anime_id')
 
 content_df.fillna("unknown",inplace=True)
+content_df['tags']=(content_df['genres']+content_df['themes']+content_df['demographics']).apply(lambda x:x.replace('unknown','')).apply(lambda x:x.split(' ')).apply(lambda x:list(filter(lambda i:len(i)>0,x)))
 cf_index=pd.read_csv('./data/cf_index.csv',index_col=0)
 pop_anime=list(cf_index['anime_id'])
 
@@ -68,6 +69,13 @@ def find_anime_id(name):
        return a_id[0] 
     else:
         return -1
+    
+def find_tag(tag,n=30):
+    res=content_df[content_df['tags'].apply(lambda x: tag in x)].sort_values(by='popularity',ascending=True)
+    res=res.head(n)
+    res=res.to_dict(orient='records')
+    return  res
+
 
 def related_names(name):
     name=name.lower()
@@ -158,6 +166,26 @@ def get_info(id):
         return jsonify({"status":"found","data":r_dict})
     except:
         return jsonify({"status":"not found"}), 400
+    
+@app.route("/tag/<string:tag>", methods=['GET'])
+def get_tags(tag):
+    try:
+        r_dict = find_tag(tag)
+        print(tag)
+
+        if len(r_dict) == 0:
+            raise ValueError("r_dict is empty.")
+
+        return jsonify({"status": "found", "data": r_dict})
+
+    except ValueError as ve:
+        # Handle the specific case where r_dict is empty
+        return jsonify({"status": "not found", "error": str(ve)}), 404
+    
+    except Exception as e:
+        # Handle all other generic exceptions
+        return jsonify({"status": "error", "message": "An unexpected error occurred", "error": str(e)}), 500
+
 @app.route("/get-info",methods=['POST'])
 def get_info_post():
     rat = request.get_json()

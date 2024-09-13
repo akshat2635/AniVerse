@@ -16,6 +16,7 @@ const addRating = async (req, res) => {
         if(foundRating){
             if(userRating) foundRating.rating=userRating;
             if(review) foundRating.review=review;
+            foundRating.reviewedAt=Date.now();
             await foundRating.save();
             return res.status(200).json({ 'message': 'rating updated' });
         }else{

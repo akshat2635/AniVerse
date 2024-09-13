@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bt{
+    opacity: 0.5;
+}
+.bt:hover{
+    opacity: 1;
+}
+
+.checked{
+    color: orange;
+}
+.transition-transform {
+    transition: transform 0.5s ease-in-out;
+}
+
+.transition-opacity {
+    transition: opacity 0.5s ease-in-out;
+}
+@layer utilities {
+    .text-balance {
+      text-wrap: balance;
+    }
+  }

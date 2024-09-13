@@ -73,6 +73,7 @@ def find_anime_id(name):
 def find_tag(tag,n=30):
     res=content_df[content_df['tags'].apply(lambda x: tag in x)].sort_values(by='popularity',ascending=True)
     res=res.head(n)
+    res=res.reset_index()
     res=res.to_dict(orient='records')
     return  res
 

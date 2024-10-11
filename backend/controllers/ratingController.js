@@ -67,7 +67,7 @@ const getRatings = async (req, res) => {
 const getTrending = async (req, res) => {
     try {
       const tenDaysAgo = new Date();
-      tenDaysAgo.setDate(tenDaysAgo.getDate() - 15);  // Calculate the date 10 days ago
+      tenDaysAgo.setDate(tenDaysAgo.getDate() - 45);  // Calculate the date 10 days ago
   
       const trendingAnime = await rating.aggregate([
         // Match condition: ratings above 7 and reviewed within the last 10 days

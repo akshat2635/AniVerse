@@ -6,40 +6,40 @@ AniVerse is a comprehensive anime recommendation platform designed to provide us
 
 The AniVerse project is organized into the following main directories:
 
--   `frontend/`: A React-based client application for the main user interface.
--   `backend/`: A Node.js and Express-based server for handling user authentication, profiles, and ratings.
--   `api/`: A Python and Flask-based API that serves anime recommendations generated from a machine learning model.
--   `model/`: A Jupyter Notebook containing the implementation and training of the recommendation model.
+- `frontend/`: A React-based client application for the main user interface.
+- `backend/`: A Node.js and Express-based server for handling user authentication, profiles, and ratings.
+- `api/`: A Python and Flask-based API that serves anime recommendations generated from a machine learning model.
+- `model/`: A Jupyter Notebook containing the implementation and training of the recommendation model.
 
 ## Features
 
-*   **User Authentication:** Secure user registration and login functionality.
-*   **Personalized Recommendations:** Get anime recommendations based on your viewing history and preferences.
-*   **Anime Information:** View detailed information about different anime series.
-*   **Rating System:** Rate anime to improve your recommendations.
-*   **Trending Anime:** Discover what's currently popular in the anime community.
+- **User Authentication:** Secure user registration and login functionality.
+- **Personalized Recommendations:** Get anime recommendations based on your viewing history and preferences.
+- **Anime Information:** View detailed information about different anime series.
+- **Rating System:** Rate anime to improve your recommendations.
+- **Trending Anime:** Discover what's currently popular in the anime community.
 
 ## Tech Stack
 
 ### Frontend (`frontend/`)
 
-*   **React** For building modern, fast, and scalable user interfaces.
-*   **Tailwind CSS & DaisyUI:** For utility-first styling and pre-built components.
-*   **React Router:** For client-side routing within the React application.
-*   **Context API:** For state management.
+- **React** For building modern, fast, and scalable user interfaces.
+- **Tailwind CSS & DaisyUI:** For utility-first styling and pre-built components.
+- **React Router:** For client-side routing within the React application.
+- **Context API:** For state management.
 
 ### Backend (`backend/`)
 
-*   **Node.js & Express:** For building the RESTful API for user management.
-*   **MongoDB:** As the database for storing user data, profiles, and ratings.
-*   **Mongoose:** As the ODM for interacting with MongoDB.
-*   **JWT (JSON Web Tokens):** For secure user authentication.
+- **Node.js & Express:** For building the RESTful API for user management.
+- **MongoDB:** As the database for storing user data, profiles, and ratings.
+- **Mongoose:** As the ODM for interacting with MongoDB.
+- **JWT (JSON Web Tokens):** For secure user authentication.
 
 ### Recommendation API (`api/`)
 
-*   **Python & Flask:** For creating the recommendation API.
-*   **Pandas, NumPy, Scikit-learn:** For data manipulation and building the recommendation model.
-*   **Collaborative & Content-Based Filtering:** The core algorithms behind the recommendation engine.
+- **Python & Flask:** For creating the recommendation API.
+- **Pandas, NumPy, Scikit-learn:** For data manipulation and building the recommendation model.
+- **Collaborative & Content-Based Filtering:** The core algorithms behind the recommendation engine.
 
 ## Getting Started
 
@@ -47,9 +47,9 @@ To get a local copy up and running, follow these simple steps.
 
 ### Prerequisites
 
-*   Node.js and npm
-*   Python and pip
-*   MongoDB
+- Node.js and npm
+- Python and pip
+- MongoDB
 
 ### Installation
 
@@ -104,4 +104,3 @@ Contributions are what make the open-source community such an amazing place to l
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
